@@ -1,29 +1,57 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import "./index.css";
+import React from "react"
+import ReactDOM from "react-dom"
+import "./index.css"
 //import App from "./App";
-import * as serviceWorker from "./serviceWorker";
+import * as serviceWorker from "./serviceWorker"
 
 //ReactDOM.render(<App />, document.getElementById("root"));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+serviceWorker.unregister()
 
 class Square extends React.Component {
   render() {
-    return <button className="square">{this.props.value}</button>;
+    return (
+      <button
+        className="square"
+        onClick={() => {
+          this.props.onClick()
+        }}
+      >
+        {this.props.value}
+      </button>
+    )
   }
 }
 
 class Board extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      squares: Array(9).fill(null),
+      xIsNext: true
+    }
+  }
+
+  handleClick(i) {
+    const squares = this.state.squares.slice()
+    squares[i] = this.state.xIsNext ? "X" : "O"
+    this.setState({ squares: squares, xIsNext: !this.state.xIsNext })
+  }
+
   renderSquare(i) {
-    return <Square value={i} />;
+    return (
+      <Square
+        value={this.state.squares[i]}
+        onClick={() => this.handleClick(i)}
+      />
+    )
   }
 
   render() {
-    const status = "Next player: X";
+    const status = "Next player: " + (this.state.xIsNext ? "X" : "O")
 
     return (
       <div>
@@ -44,7 +72,7 @@ class Board extends React.Component {
           {this.renderSquare(8)}
         </div>
       </div>
-    );
+    )
   }
 }
 
@@ -60,10 +88,10 @@ class Game extends React.Component {
           <ol>{/* TODO */}</ol>
         </div>
       </div>
-    );
+    )
   }
 }
 
 // ========================================
 
-ReactDOM.render(<Game />, document.getElementById("root"));
+ReactDOM.render(<Game />, document.getElementById("root"))
